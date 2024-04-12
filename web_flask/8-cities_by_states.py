@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Starts a Flask web application """
+
 from flask import Flask, render_template
 from models import storage
 from models.state import State
@@ -23,7 +24,7 @@ def cities_by_states():
 
 
 @app.teardown_appcontext
-def close_storage(exception):
+def close(self):
     """Closes the database after process"""
     storage.close()
 
