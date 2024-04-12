@@ -28,8 +28,8 @@ class DBStorage():
             pool_pre_ping=True
         ))
 
-        # if getenv("HBNB_ENV", "dev") == "test":
-            # Base.metadata.drop_all(self.__engine)
+        # if getenv("HBNB_ENV") == "test":
+              Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Queries the database based on the class name"""
