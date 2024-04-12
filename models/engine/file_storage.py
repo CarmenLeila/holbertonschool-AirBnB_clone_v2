@@ -8,8 +8,9 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
+
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage"""
+        """Returns a dict or filtered list of models currently in storage"""
         if cls is None:
             return FileStorage.__objects
         else:
@@ -20,15 +21,18 @@ class FileStorage:
         """Adds new object to storage dictionary"""
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
-    def save(self):
-        """Saves storage dictionary to file"""
-        with open(FileStorage.__file_path, 'w') as f:
-            temp = {
-		key: val.to_dict() for key,
-		val in FileStorage.__objects.items()
-	    }
 
-            json.dump(temp, f, indent = 4)
+    def save(self):
+        """ Saves storage dictionary to file """
+        with open(FileStorage.__file_path, 'w') as f:
+
+            temp = {
+                key: val.to_dict() for key,
+                val in FileStorage.__objects.items()
+            }
+
+            json.dump(temp, f, indent=4)
+
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -50,9 +54,10 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
 
     def delete(self, obj=None):
         """ Deletes an object from the storage dict """
@@ -62,9 +67,7 @@ class FileStorage:
             key = obj.to_dict()['__class__'] + '.' + obj.id
             if key in FileStorage.__objects:
                 del FileStorage.__objects[key]
-	    self.save()
+
     def close(self):
-        """
-        This is to deserialize the data
-        """
+        """Calls reload() method for deserializing the JSON file to objects"""
         self.reload()
