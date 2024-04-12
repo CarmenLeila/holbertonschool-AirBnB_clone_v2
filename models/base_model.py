@@ -8,10 +8,7 @@ import models
 from os import getenv
 
 
-if getenv("HBNB_TYPE_STORAGE") == "db":
-    Base = declarative_base()
-else:
-    Base = object
+Base = declarative_base()
 
 
 class BaseModel:
@@ -63,4 +60,5 @@ class BaseModel:
 
     def delete(self):
         """Delete the current instance from the storage"""
-        models.storage.delete(self)
+        from models import storage
+        storage.delete(self)
