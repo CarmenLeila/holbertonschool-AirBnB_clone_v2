@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ Starts a Flask web application """
-
 from flask import Flask, render_template
 from models import storage
 from models.state import State
@@ -9,13 +8,8 @@ from models.state import State
 app = Flask(__name__)
 
 
- @app.route("/states", defaults={'id': None}, strict_slashes=False)
-def states_no_id():
-""" Defines a root for the path """
-states = storage.all(State)
-return render_template('9-states.html', states=states)
-
- @app.route("/states/<id>", strict_slashes=False)
+@app.route("/states", defaults={'id': None}, strict_slashes=False)
+@app.route("/states/<id>", strict_slashes=False)
 def states_list(id):
     """Displaylist of states sorted by name"""
     states = storage.all(State)
@@ -24,7 +18,7 @@ def states_list(id):
     return render_template('9-states.html', states=states, id=id)
 
 
- @app.teardown_appcontext
+@app.teardown_appcontext
 def close_session(self):
     """ Closes the session after each request """
     storage.close()
